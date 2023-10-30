@@ -1,6 +1,5 @@
 import psycopg2
 
-
 class Model:
     def __init__(self):
         self.conn = psycopg2.connect(
@@ -57,6 +56,42 @@ class Model:
 
 #booking_ticket
 #################################################################################
+
+#client
+############################################################################
+
+############################################################################
+
+#room
+##############################################################################
+
+
+##############################################################################
+    def add_task(self, title, description):
+        c = self.conn.cursor()
+        c.execute('INSERT INTO tasks (title, description) VALUES (%s, %s)', (title, description))
+        self.conn.commit()
+
+    def get_all_tasks(self):
+        c = self.conn.cursor()
+        c.execute('SELECT * FROM tasks')
+        return c.fetchall()
+
+    def update_task(self, task_id, title, description):
+        c = self.conn.cursor()
+        c.execute('UPDATE tasks SET title=%s, description=%s WHERE id=%s', (title, description, task_id))
+        self.conn.commit()
+
+    def delete_task(self, task_id):
+        c = self.conn.cursor()
+        c.execute('DELETE FROM tasks WHERE id=%s', (task_id,))
+        self.conn.commit()
+
+class ModelBookingTicket:
+    def __init__(self, db_model):
+        self.db_manager = db_model
+        self.conn = db_model.conn  # Передаем атрибут conn из db_model
+
     # def add_booking_ticket(self, client_id, room_number, booking_start_date, booking_end_date, price):
     #     c = self.conn.cursor()
     #     c.execute(
@@ -127,8 +162,10 @@ class Model:
         return bool(c.fetchone())
 
 
-#client
-############################################################################
+class ModelClient:
+    def __init__(self, db_model):
+        self.db_manager = db_model
+        self.conn = db_model.conn  # Передаем атрибут conn из db_model
     def add_client(self, client_id, name, surname, email):
         c = self.conn.cursor()
         try:
@@ -168,10 +205,11 @@ class Model:
             print(f"Ошибка при удалении клиента: {str(e)}")
             return False  # Возвращает False, если удаление не удалось
 
-############################################################################
+class ModelRoom:
+    def __init__(self, db_model):
+        self.db_manager = db_model
+        self.conn = db_model.conn  # Передаем атрибут conn из db_model
 
-#room
-##############################################################################
     def add_room(self, room_number, room_type):
         c = self.conn.cursor()
         try:
@@ -214,25 +252,3 @@ class Model:
         c = self.conn.cursor()
         c.execute('SELECT 1 FROM room WHERE room_number = %s', (room_number,))
         return c.fetchone() is not None
-
-##############################################################################
-    def add_task(self, title, description):
-        c = self.conn.cursor()
-        c.execute('INSERT INTO tasks (title, description) VALUES (%s, %s)', (title, description))
-        self.conn.commit()
-
-    def get_all_tasks(self):
-        c = self.conn.cursor()
-        c.execute('SELECT * FROM tasks')
-        return c.fetchall()
-
-    def update_task(self, task_id, title, description):
-        c = self.conn.cursor()
-        c.execute('UPDATE tasks SET title=%s, description=%s WHERE id=%s', (title, description, task_id))
-        self.conn.commit()
-
-    def delete_task(self, task_id):
-        c = self.conn.cursor()
-        c.execute('DELETE FROM tasks WHERE id=%s', (task_id,))
-        self.conn.commit()
-
