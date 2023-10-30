@@ -1,5 +1,6 @@
 import psycopg2
 
+
 class Model:
     def __init__(self):
         self.conn = psycopg2.connect(
@@ -53,20 +54,6 @@ class Model:
 
         self.conn.commit()
 
-
-#booking_ticket
-#################################################################################
-
-#client
-############################################################################
-
-############################################################################
-
-#room
-##############################################################################
-
-
-##############################################################################
     def add_task(self, title, description):
         c = self.conn.cursor()
         c.execute('INSERT INTO tasks (title, description) VALUES (%s, %s)', (title, description))
@@ -87,17 +74,15 @@ class Model:
         c.execute('DELETE FROM tasks WHERE id=%s', (task_id,))
         self.conn.commit()
 
+# ModelBookingTicket
+#################################################################################
+
+
 class ModelBookingTicket:
     def __init__(self, db_model):
-        self.db_manager = db_model
+        #self.db_manager = db_model
         self.conn = db_model.conn  # Передаем атрибут conn из db_model
 
-    # def add_booking_ticket(self, client_id, room_number, booking_start_date, booking_end_date, price):
-    #     c = self.conn.cursor()
-    #     c.execute(
-    #         'INSERT INTO booking_ticket (client_id, room_number, booking_start_date, booking_end_date, price) VALUES (%s, %s, %s, %s, %s)',
-    #         (client_id, room_number, booking_start_date, booking_end_date, price))
-    #     self.conn.commit()
     def add_booking_ticket(self, booking_id, client_id, room_number, booking_start_date, booking_end_date, price):
         c = self.conn.cursor()
         try:
@@ -114,7 +99,8 @@ class ModelBookingTicket:
             else:
                 # Все проверки прошли, выполняем вставку в booking_ticket
                 c.execute(
-                    'INSERT INTO booking_ticket (booking_id, client_id, room_number, booking_start_date, booking_end_date, price) VALUES (%s, %s, %s, %s, %s, %s)',
+                    'INSERT INTO booking_ticket (booking_id, client_id, room_number, '
+                    'booking_start_date, booking_end_date, price) VALUES (%s, %s, %s, %s, %s, %s)',
                     (booking_id, client_id, room_number, booking_start_date, booking_end_date, price))
                 self.conn.commit()
                 return True
@@ -133,8 +119,9 @@ class ModelBookingTicket:
         c = self.conn.cursor()
         try:
             # Попытка выполнить обновление записи
-            c.execute('UPDATE booking_ticket SET client_id=%s, room_number=%s, booking_start_date=%s, booking_end_date=%s, price=%s WHERE booking_id=%s',
-                (client_id, room_number, booking_start_date, booking_end_date, price, booking_id))
+            c.execute('UPDATE booking_ticket SET client_id=%s, room_number=%s, booking_start_date=%s, '
+                      'booking_end_date=%s, price=%s WHERE booking_id=%s',
+                      (client_id, room_number, booking_start_date, booking_end_date, price, booking_id))
             self.conn.commit()
             return True  # Возвращает True, если обновление прошло успешно
         except Exception as e:
@@ -162,14 +149,20 @@ class ModelBookingTicket:
         return bool(c.fetchone())
 
 
+# ModelClient
+############################################################################
+
+
 class ModelClient:
     def __init__(self, db_model):
-        self.db_manager = db_model
+        #self.db_manager = db_model
         self.conn = db_model.conn  # Передаем атрибут conn из db_model
+
     def add_client(self, client_id, name, surname, email):
         c = self.conn.cursor()
         try:
-            c.execute('INSERT INTO client (client_id, name, surname, email) VALUES (%s, %s, %s, %s)', (client_id, name, surname, email))
+            c.execute('INSERT INTO client (client_id, name, surname, email) VALUES (%s, %s, %s, %s)',
+                      (client_id, name, surname, email))
             self.conn.commit()
             return True  # Возвращает True, если вставка прошла успешно
         except Exception as e:
@@ -205,15 +198,24 @@ class ModelClient:
             print(f"Ошибка при удалении клиента: {str(e)}")
             return False  # Возвращает False, если удаление не удалось
 
+    def check_client_existence(self, client_id):
+        c = self.conn.cursor()
+        c.execute("SELECT 1 FROM client WHERE client_id = %s", (client_id,))
+        return bool(c.fetchone())
+
+# ModelRoom
+##############################################################################
+
+
 class ModelRoom:
     def __init__(self, db_model):
-        self.db_manager = db_model
+        #self.db_manager = db_model
         self.conn = db_model.conn  # Передаем атрибут conn из db_model
 
     def add_room(self, room_number, room_type):
         c = self.conn.cursor()
         try:
-            c.execute('INSERT INTO room (room_number ,room_type) VALUES (%s, %s)', (room_number ,room_type,))
+            c.execute('INSERT INTO room (room_number ,room_type) VALUES (%s, %s)', (room_number, room_type,))
             self.conn.commit()
             return True  # Возвращает True, если вставка прошла успешно
         except Exception as e:
