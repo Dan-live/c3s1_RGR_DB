@@ -13,42 +13,51 @@ class Controller:
         self.view_room = ViewRoom()
 
     def run(self):
+        methods = {'1': self.add_task, '2': self.view_tasks, '3': self.update_task, '4': self.delete_task,
+                   '5': self.add_booking_ticket, '6': self.view_booking_tickets, '7': self.update_booking_ticket, '8': self.delete_booking_ticket,
+                   '9': self.add_client, '10': self.view_clients, '11': self.update_client, '12': self.delete_client,
+                   '13': self.add_room, '14': self.view_rooms,  '15': self.update_room, '16': self.delete_room}
         while True:
             choice = self.show_menu()
-            if choice == '1':
-                self.add_task()
-            elif choice == '2':
-                self.view_tasks()
-            elif choice == '3':
-                self.update_task()
-            elif choice == '4':
-                self.delete_task()
-            elif choice == '5':
-                self.add_booking_ticket()  # Опция для добавления бронирования
-            elif choice == '6':
-                self.view_booking_tickets()  # Опция для просмотра бронирований
-            elif choice == '7':
-                self.update_booking_ticket()  # Опция для обновления бронирования
-            elif choice == '8':
-                self.delete_booking_ticket()  # Опция для удаления бронирования
-            elif choice == '9':
-                self.add_client()  # Опция для добавления клиента
-            elif choice == '10':
-                self.view_clients()  # Опция для просмотра клиентов
-            elif choice == '11':
-                self.update_client()  # Опция для обновления клиента
-            elif choice == '12':
-                self.delete_client()  # Опция для удаления клиента
-            elif choice == '13':
-                self.add_room()  # Опция для добавления комнаты
-            elif choice == '14':
-                self.view_rooms()  # Опция для просмотра комнат
-            elif choice == '15':
-                self.update_room()  # Опция для обновления комнаты
-            elif choice == '16':
-                self.delete_room()  # Опция для удаления комнаты
+
+            if choice in methods:
+                methods[choice]()
             elif choice == '17':
                 break
+            # if choice == '1':
+            #     self.add_task()
+            # elif choice == '2':
+            #     self.view_tasks()
+            # elif choice == '3':
+            #     self.update_task()
+            # elif choice == '4':
+            #     self.delete_task()
+            # elif choice == '5':
+            #     self.add_booking_ticket()  # Опция для добавления бронирования
+            # elif choice == '6':
+            #     self.view_booking_tickets()  # Опция для просмотра бронирований
+            # elif choice == '7':
+            #     self.update_booking_ticket()  # Опция для обновления бронирования
+            # elif choice == '8':
+            #     self.delete_booking_ticket()  # Опция для удаления бронирования
+            # elif choice == '9':
+            #     self.add_client()  # Опция для добавления клиента
+            # elif choice == '10':
+            #     self.view_clients()  # Опция для просмотра клиентов
+            # elif choice == '11':
+            #     self.update_client()  # Опция для обновления клиента
+            # elif choice == '12':
+            #     self.delete_client()  # Опция для удаления клиента
+            # elif choice == '13':
+            #     self.add_room()  # Опция для добавления комнаты
+            # elif choice == '14':
+            #     self.view_rooms()  # Опция для просмотра комнат
+            # elif choice == '15':
+            #     self.update_room()  # Опция для обновления комнаты
+            # elif choice == '16':
+            #     self.delete_room()  # Опция для удаления комнаты
+            # elif choice == '17':
+            #     break
 
     def show_menu(self):
         self.view.show_message("\nMenu:")

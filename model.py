@@ -235,3 +235,4 @@ class Model:
         c = self.conn.cursor()
         c.execute('DELETE FROM tasks WHERE id=%s', (task_id,))
         self.conn.commit()
+
