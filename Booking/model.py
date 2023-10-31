@@ -1,11 +1,7 @@
-
 # ModelBookingTicket
 #################################################################################
-
-
 class ModelBookingTicket:
     def __init__(self, db_model):
-        #self.db_manager = db_model
         self.conn = db_model.conn  # Передаем атрибут conn из db_model
 
     def add_booking_ticket(self, booking_id, client_id, room_number, booking_start_date, booking_end_date, price):

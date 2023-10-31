@@ -1,8 +1,5 @@
-
-
 class ModelTask:
     def __init__(self, db_model):
-        #self.db_manager = db_model
         self.conn = db_model.conn  # Передаем атрибут conn из db_model
 
     def add_task(self, title, description):

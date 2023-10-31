@@ -1,8 +1,5 @@
-
 # ControllerClient
 ############################################################################
-
-
 class ControllerClient:
     def __init__(self, model_client, view_client):
         self.model_client = model_client

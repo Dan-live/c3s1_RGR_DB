@@ -1,6 +1,4 @@
-
 class TaskView:
-
     def show_tasks(self, tasks):
         print("Tasks:")
         for task in tasks:

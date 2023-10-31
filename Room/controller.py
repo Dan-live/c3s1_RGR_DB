@@ -1,8 +1,5 @@
-
 # ControllerRoom
 ############################################################################
-
-
 class ControllerRoom:
     def __init__(self, model_room, view_room):
         self.model_room = model_room

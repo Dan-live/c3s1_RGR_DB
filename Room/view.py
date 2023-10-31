@@ -1,8 +1,5 @@
-
 # ViewRoom
 #################################################################################
-
-
 class ViewRoom:
     def show_rooms(self, rooms):
         print("Rooms:")
