@@ -69,3 +69,27 @@ class ControllerBooking:
                 self.view_booking_ticket.show_booking_ticket_message("Failed to delete booking.")
         else:
             self.view_booking_ticket.show_booking_ticket_message("Booking with the specified ID does not exist.")
+
+    def create_booking_sequence(self):
+        # Виклик методу create_booking_sequence з класу ModelBookingTicket
+        self.model_booking_ticket.create_booking_sequence()
+        self.view_booking_ticket.show_booking_ticket_message("Booking sequence created successfully!")
+
+    def generate_rand_booking_ticket_data(self, number_of_operations):
+        # Виклик методу generate_rand_booking_ticket_data з класу ModelBookingTicket
+        success = self.model_booking_ticket.generate_rand_booking_ticket_data(number_of_operations)
+
+        if success:
+            self.view_booking_ticket.show_booking_ticket_message(
+                f"{number_of_operations} booking tickets generated successfully!")
+        else:
+            self.view_booking_ticket.show_booking_ticket_message("Failed to generate booking tickets.")
+
+    def truncate_booking_table(self):
+        # Викликаємо метод відповідного model
+        success = self.model_booking_ticket.truncate_booking_table()
+
+        if success:
+            self.view_booking_ticket.show_booking_ticket_message("All booking tickets truncated successfully!")
+        else:
+            self.view_booking_ticket.show_booking_ticket_message("Failed to truncate booking tickets data.")

@@ -46,3 +46,50 @@ class ModelRoom:
         c = self.conn.cursor()
         c.execute('SELECT 1 FROM room WHERE room_number = %s', (room_number,))
         return c.fetchone() is not None
+
+    def create_room_sequence(self):
+        # Перевірка існування послідовності
+        c = self.conn.cursor()
+        c.execute("""
+        DO $$
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'room_number_seq') THEN
+                -- Якщо послідовності не існує, створюємо її
+                CREATE SEQUENCE room_number_seq;
+            ELSE
+                -- Якщо послідовність існує, видаляємо і створюємо нову
+                DROP SEQUENCE room_number_seq;
+                CREATE SEQUENCE room_number_seq;
+            END IF;
+        END $$;
+        """)
+        self.conn.commit()
+    def generate_rand_room_data(self, number_of_operations):
+        c = self.conn.cursor()
+        try:
+            # Вставка даних
+            c.execute("""
+            INSERT INTO room (room_number, room_type)
+            SELECT
+                nextval('room_number_seq'), 
+                (array['Single', 'Double', 'Suite'])[floor(random() * 3) + 1]
+            FROM generate_series(1, %s);
+            """, (number_of_operations,))
+            self.conn.commit()
+            return True  # Возвращает True, если вставка прошла успешно
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Ошибка при добавлении комнаты: {str(e)}")
+            return False  # Возвращает False, если вставка не удалась
+
+    def truncate_room_table(self):
+        c = self.conn.cursor()
+        try:
+            # Вставка даних
+            c.execute("""DELETE FROM room""")
+            self.conn.commit()
+            return True  # Возвращает True, если вставка прошла успешно
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Ошибка при добавлении клиента: {str(e)}")
+            return False  # Возвращает False, если вставка не удалась

@@ -63,3 +63,26 @@ class ControllerRoom:
                 self.view_room.show_room_message("Failed to delete room.")
         else:
             self.view_room.show_room_message("Room with the specified number does not exist.")
+
+    def create_room_sequence(self):
+        # Виклик методу create_room_sequence з класу ModelRoom
+        self.model_room.create_room_sequence()
+        self.view_room.show_room_message("Room sequence created successfully!")
+
+    def generate_rand_room_data(self, number_of_operations):
+        # Виклик методу generate_rand_room_data з класу ModelRoom
+        success = self.model_room.generate_rand_room_data(number_of_operations)
+
+        if success:
+            self.view_room.show_room_message(f"{number_of_operations} rooms generated successfully!")
+        else:
+            self.view_room.show_room_message("Failed to generate rooms.")
+
+    def truncate_room_table(self):
+        # Викликаємо метод відповідного model
+        success = self.model_room.truncate_room_table()
+
+        if success:
+            self.view_room.show_room_message("All rooms data truncated successfully!")
+        else:
+            self.view_room.show_room_message("Failed to truncate room data.")

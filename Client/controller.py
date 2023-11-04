@@ -44,3 +44,26 @@ class ControllerClient:
             self.view_client.show_client_message("Client deleted successfully!")
         else:
             self.view_client.show_client_message("Failed to delete client.")
+
+    def create_client_sequence(self):
+        # Виклик методу create_client_sequence з класу ModelClient
+        self.model_client.create_client_sequence()
+        self.view_client.show_client_message("Client sequence created successfully!")
+
+    def generate_rand_client_data(self, number_of_operations):
+        # Виклик методу generate_rand_client_data з класу ModelClient
+        success = self.model_client.generate_rand_client_data(number_of_operations)
+
+        if success:
+            self.view_client.show_client_message(f"{number_of_operations} clients generated successfully!")
+        else:
+            self.view_client.show_client_message("Failed to generate clients.")
+
+    def truncate_client_table(self):
+        # Викликаємо метод відповідного model
+        success = self.model_client.truncate_client_table()
+
+        if success:
+            self.view_client.show_client_message("All client data truncated successfully!")
+        else:
+            self.view_client.show_client_message("Failed to truncate client data.")
