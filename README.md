@@ -1,4 +1,6 @@
-# Python CRUD Application with PostgreSQL and `psycopg2`
+# РГР з дисципліни `Бази даних і засоби управління`
+
+![Логічна модель бази даних](image.png)
 
 ```
 Menu:

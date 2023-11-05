@@ -2,7 +2,7 @@
 #################################################################################
 class ModelAnalytics:
     def __init__(self, db_model):
-        self.conn = db_model.conn  # Передаем атрибут conn из db_model
+        self.conn = db_model.conn
 
     def room_occupancy(self):
         c = self.conn.cursor()
@@ -15,13 +15,13 @@ class ModelAnalytics:
                     ORDER BY occupancy_count DESC;
                """)
 
-            room_occupancy_data = c.fetchall()  # Отримати дані з запиту
+            room_occupancy_data = c.fetchall()  # Get data from the query
 
             self.conn.commit()
-            return room_occupancy_data  # Повернути дані
+            return room_occupancy_data
         except Exception as e:
             self.conn.rollback()
-            print(f"Помилка при аналітиці зайнятості: {str(e)}")
+            print(f"Error in room occupancy analytics: {str(e)}")
             return None
 
 
@@ -43,13 +43,13 @@ class ModelAnalytics:
 
                         """)
 
-            number_of_orders_data = c.fetchall()  # Отримати дані з запиту
+            number_of_orders_data = c.fetchall()  # Get data from the query
 
             self.conn.commit()
-            return number_of_orders_data  # Повернути дані
+            return number_of_orders_data
         except Exception as e:
             self.conn.rollback()
-            print(f"Помилка при аналітиці зайнятості: {str(e)}")
+            print(f"Error in analyzing the number of orders: {str(e)}")
             return None
 
     def client_analytics(self):
@@ -73,11 +73,11 @@ class ModelAnalytics:
                             booking_count DESC;                                
                         """)
 
-            number_of_orders_data = c.fetchall()  # Отримати дані з запиту
+            number_of_orders_data = c.fetchall()  # Get data from the query
 
             self.conn.commit()
-            return number_of_orders_data  # Повернути дані
+            return number_of_orders_data
         except Exception as e:
             self.conn.rollback()
-            print(f"Помилка при аналітиці зайнятості: {str(e)}")
+            print(f"Error in customer analytics: {str(e)}")
             return None

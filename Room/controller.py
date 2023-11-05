@@ -6,7 +6,7 @@ class ControllerRoom:
         self.view_room = view_room
 
     def add_room(self):
-        # # Запрос данных о комнате от пользователя
+        # Requesting room data from the user
 
         room_number = self.view_room.get_room_number()
         room_type = self.view_room.get_room_input()
@@ -17,27 +17,27 @@ class ControllerRoom:
             self.view_room.show_room_message("Failed to add room.")
 
     def view_rooms(self):
-        # Вызов метода из класса Model для получения всех комнат
+        # Call a method from the Model class to get all the rooms
         rooms = self.model_room.get_all_rooms()
 
-        # Отображение комнат через метод из класса ViewRoom (подразумевая, что у вас есть такой класс)
+        # Display rooms via a method from the ViewRoom class (assuming you have such a class)
         self.view_room.show_rooms(rooms)
 
     def update_room(self):
-        # Запрос номера комнаты, которую нужно обновить
+        # Request the number of the room to be updated
         room_number = self.view_room.get_room_number()
 
-        # Проверка, существует ли комната с указанным номером
+        # Check if there is a room with the specified number
         room_exists = self.model_room.check_room_existence(room_number)
 
         if room_exists:
-            # Запрос обновленных данных о комнате от пользователя
+            # Request updated room data from the user
             room_type = self.view_room.get_room_input()
 
-            # Вызов метода из класса Model для обновления комнаты
+            # Call a method from the Model class to update the room
             success = self.model_room.update_room(room_number, room_type)
 
-            # Отображение сообщения о результате операции
+            # Display a message about the result of the operation
             if success:
                 self.view_room.show_room_message("Room updated successfully!")
             else:
@@ -46,17 +46,17 @@ class ControllerRoom:
             self.view_room.show_room_message("Room with the specified number does not exist.")
 
     def delete_room(self):
-        # Запрос номера комнаты, которую нужно удалить
+        # Request the number of the room to be deleted
         room_number = self.view_room.get_room_number()
 
-        # Проверка, существует ли комната с указанным номером
+        # Check if there is a room with the specified number
         room_exists = self.model_room.check_room_existence(room_number)
 
         if room_exists:
-            # Вызов метода из класса Model для удаления комнаты
+            # Call a method from the Model class to delete a room
             success = self.model_room.delete_room(room_number)
 
-            # Отображение сообщения о результате операции
+            # Display a message about the result of the operation
             if success:
                 self.view_room.show_room_message("Room deleted successfully!")
             else:
@@ -65,12 +65,12 @@ class ControllerRoom:
             self.view_room.show_room_message("Room with the specified number does not exist.")
 
     def create_room_sequence(self):
-        # Виклик методу create_room_sequence з класу ModelRoom
+        # Call method create_room_sequence from class ModelRoom
         self.model_room.create_room_sequence()
         self.view_room.show_room_message("Room sequence created successfully!")
 
     def generate_rand_room_data(self, number_of_operations):
-        # Виклик методу generate_rand_room_data з класу ModelRoom
+        # Call the generate_rand_room_data method from the ModelRoom class
         success = self.model_room.generate_rand_room_data(number_of_operations)
 
         if success:
@@ -79,7 +79,7 @@ class ControllerRoom:
             self.view_room.show_room_message("Failed to generate rooms.")
 
     def truncate_room_table(self):
-        # Викликаємо метод відповідного model
+        # Call the method of the corresponding model
         success = self.model_room.truncate_room_table()
 
         if success:

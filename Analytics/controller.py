@@ -6,31 +6,31 @@ class ControllerAnalytics:
         self.view_analytics = view_analytics
 
     def room_occupancy(self):
-        # Отримати аналітичні дані
+        # Get analytical data
         room_occupancy_data = self.model_analytics.room_occupancy()
 
-        # Вивести результати
+        # Show results
         if room_occupancy_data:
             self.view_analytics.display_room_occupancy(room_occupancy_data)
         else:
-            print("Помилка при виконанні аналітики")
+            print("Error when performing analytics")
 
     def number_of_orders(self):
-        # Виконати аналітику
+        # Do analytics
         number_of_orders_data = self.model_analytics.number_of_orders()
 
-        # Вивести результати
+        # Show results
         if number_of_orders_data:
             self.view_analytics.display_number_of_orders(number_of_orders_data)
         else:
-            print("Помилка при виконанні аналітики зайнятості номерів")
+            print("Error when performing room occupancy analytics")
 
     def client_analytics(self):
-        # Виконати аналітику
+        # Do analytics
         client_analytics_data = self.model_analytics.client_analytics()
 
-        # Вивести результати
+        # Show results
         if client_analytics_data is not None:
             self.view_analytics.display_client_analytics(client_analytics_data)
         else:
-            print("Помилка при виконанні аналітики")
+            print("Error when performing analytics")

@@ -14,7 +14,7 @@ class Model:
 
     def create_tables(self):
         c = self.conn.cursor()
-        # Проверка наличия таблиц
+        # Check for tables
         c.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'booking_ticket')")
         booking_ticket_table_exists = c.fetchone()[0]
 

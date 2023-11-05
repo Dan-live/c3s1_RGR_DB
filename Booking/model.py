@@ -1,17 +1,13 @@
-# import datetime
-# import random
-
-
 # ModelBookingTicket
 #################################################################################
 class ModelBookingTicket:
     def __init__(self, db_model):
-        self.conn = db_model.conn  # Передаем атрибут conn из db_model
+        self.conn = db_model.conn
 
     def add_booking_ticket(self, booking_id, client_id, room_number, booking_start_date, booking_end_date, price):
         c = self.conn.cursor()
         try:
-            # Проверяем наличие client_id и room_number в соответствующих родительских таблицах
+            # Check if client_id and room_number match parent tables
             c.execute('SELECT 1 FROM client WHERE client_id = %s', (client_id,))
             client_exists = c.fetchone()
 
@@ -19,10 +15,10 @@ class ModelBookingTicket:
             room_exists = c.fetchone()
 
             if not client_exists or not room_exists:
-                # Возвращаем сообщение об ошибке или бросаем исключение
-                return False  # Или вызываем исключение, чтобы обработать его далее
+                # Return an exception notification and throw an error
+                return False  # Or throw an exception to process it further
             else:
-                # Все проверки прошли, выполняем вставку в booking_ticket
+                # All checks have passed, insert into booking_ticket
                 c.execute(
                     'INSERT INTO booking_ticket (booking_id, client_id, room_number, '
                     'booking_start_date, booking_end_date, price) VALUES (%s, %s, %s, %s, %s, %s)',
@@ -30,9 +26,8 @@ class ModelBookingTicket:
                 self.conn.commit()
                 return True
         except Exception as e:
-            # Обработка ошибок
             self.conn.rollback()
-            print(f"Ошибка при добавлении бронирования: {str(e)}")
+            print(f"Error when adding a booking: {str(e)}")
             return False
 
     def get_all_booking_tickets(self):
@@ -43,30 +38,30 @@ class ModelBookingTicket:
     def update_booking_ticket(self, booking_id, client_id, room_number, booking_start_date, booking_end_date, price):
         c = self.conn.cursor()
         try:
-            # Попытка выполнить обновление записи
+            # Attempting to update a record
             c.execute('UPDATE booking_ticket SET client_id=%s, room_number=%s, booking_start_date=%s, '
                       'booking_end_date=%s, price=%s WHERE booking_id=%s',
                       (client_id, room_number, booking_start_date, booking_end_date, price, booking_id))
             self.conn.commit()
-            return True  # Возвращает True, если обновление прошло успешно
+            return True  # Returns True if the update was successful
         except Exception as e:
-            # Обработка ошибки в случае, если обновление не удалось
+            # Handling an error if the update failed
             self.conn.rollback()
-            print(f"Ошибка при обновлении бронирования: {str(e)}")
-            return False  # Возвращает False, если обновление не удалось
+            print(f"Error when updating a reservation: {str(e)}")
+            return False   # Returns False if insertion fails
 
     def delete_booking_ticket(self, booking_id):
         c = self.conn.cursor()
         try:
-            # Попытка выполнить удаление записи
+            # Attempting to update a record
             c.execute('DELETE FROM booking_ticket WHERE booking_id=%s', (booking_id,))
             self.conn.commit()
-            return True  # Возвращает True, если удаление прошло успешно
+            return True  # Returns True if the update was successful
         except Exception as e:
-            # Обработка ошибки в случае, если удаление не удалось
+            # Handling an error in case the deletion failed
             self.conn.rollback()
-            print(f"Ошибка при удалении бронирования: {str(e)}")
-            return False  # Возвращает False, если удаление не удалось
+            print(f"Error when deleting a reservation: {str(e)}")
+            return False   # Returns False if insertion fails
 
     def check_booking_existence(self, booking_id):
         c = self.conn.cursor()
@@ -92,18 +87,6 @@ class ModelBookingTicket:
         c = self.conn.cursor()
         try:
             c.execute("""
-                    
-            DO $$
-            BEGIN
-                IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'booking_id_seq') THEN
-                    -- Якщо послідовності не існує, створюємо її
-                    CREATE SEQUENCE booking_id_seq;
-                ELSE
-                    -- Якщо послідовність існує, видаляємо і створюємо нову
-                    DROP SEQUENCE booking_id_seq;
-                    CREATE SEQUENCE booking_id_seq;
-                END IF;
-            END $$;
             INSERT INTO booking_ticket (booking_id, client_id, room_number, booking_start_date, booking_end_date, price)
                 SELECT
                     nextval('booking_id_seq'),
@@ -122,27 +105,16 @@ class ModelBookingTicket:
             print(f"Error while generating booking tickets: {str(e)}")
             return False
 
-    # def generate_random_DateTime(self):
-    #     start_date = datetime.date(2023, 1, 1)
-    #     end_date = datetime.date(2023, 12, 31)
-    #
-    #     while True:
-    #         random_days = datetime.timedelta(days=random.randint(0, (end_date - start_date).days))
-    #         random_start_date = start_date + random_days
-    #         random_end_date = random_start_date + datetime.timedelta(days=random.randint(1, 10))  # Ensure end_date > start_date
-    #
-    #         if random_end_date > random_start_date:
-    #             return random_start_date, random_end_date
 
     def truncate_booking_table(self):
         c = self.conn.cursor()
         try:
-            # Вставка даних
+            # Insert data
             c.execute("""DELETE FROM booking_ticket""")
             self.conn.commit()
-            return True  # Возвращает True, если вставка прошла успешно
+            return True  # Returns True if the insertion was successful
         except Exception as e:
             self.conn.rollback()
-            print(f"Ошибка при добавлении клиента: {str(e)}")
-            return False  # Возвращает False, если вставка не удалась
+            print(f"Error when adding a client: {str(e)}")
+            return False  # Returns False if insertion fails
 
