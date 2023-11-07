@@ -65,37 +65,39 @@ class ModelAnalytics:
     def client_analytics(self):
         c = self.conn.cursor()
         try:
-            c.execute("""SELECT * from (
-                        SELECT max(booking_count) as max from (
+            c.execute("""
+
+                    WITH ClientBookingCounts AS (
                         SELECT 
                             client.client_id, 
                             client.name, 
                             client.surname, 
                             client.email, 
-                        COUNT(booking_ticket.booking_id) AS booking_count 
+                            COUNT(booking_ticket.booking_id) AS booking_count 
                         FROM 
                             client 
                         JOIN 
                             booking_ticket ON client.client_id = booking_ticket.client_id 
                         GROUP BY 
-                            client.client_id, client.name, client.surname, client.email )t) t1
-                        
-                        inner join
-                            
-                        (SELECT 
-                            client.client_id, 
-                            client.name, 
-                            client.surname, 
-                            client.email, 
-                        COUNT(booking_ticket.booking_id) AS booking_count 
-                        FROM 
-                            client 
-                        JOIN 
-                            booking_ticket ON client.client_id = booking_ticket.client_id 
-                        GROUP BY 
-                            client.client_id, client.name, client.surname, client.email  ) t2
-                            
-                        ON t1.max = t2.booking_count
+                            client.client_id, client.name, client.surname, client.email
+                    )
+                    
+                    
+                    SELECT * 
+                    FROM (
+                        SELECT max(booking_count) as max
+                        FROM ClientBookingCounts
+                    ) AS t1
+                    
+                    INNER JOIN (
+                        SELECT 
+                            client_id, 
+                            name, 
+                            surname, 
+                            email, 
+                            booking_count
+                        FROM ClientBookingCounts
+                    ) AS t2 ON t1.max = t2.booking_count;
                                
                         """)
 
