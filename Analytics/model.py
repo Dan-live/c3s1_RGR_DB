@@ -8,11 +8,21 @@ class ModelAnalytics:
         c = self.conn.cursor()
         try:
             c.execute("""
+                    SELECT * from
+                    (SELECT max(occupancy_count) as max from (
                     SELECT room_number, COUNT(*) AS occupancy_count
                     FROM booking_ticket
                     GROUP BY room_number
-                    HAVING COUNT(*) >= 3
-                    ORDER BY occupancy_count DESC;
+                    )t) t1
+                    
+                    inner join 
+                    
+                    (SELECT room_number, COUNT(*) AS occupancy_count
+                    FROM booking_ticket
+                    GROUP BY room_number
+                    ) t2
+                    
+                    ON t1.max = t2.occupancy_count                
                """)
 
             room_occupancy_data = c.fetchall()  # Get data from the query
@@ -55,22 +65,38 @@ class ModelAnalytics:
     def client_analytics(self):
         c = self.conn.cursor()
         try:
-            c.execute("""SELECT
-                            client.client_id,
-                            client.name,
-	                        client.surname,
-	                        client.email,
-                            COUNT(booking_ticket.booking_id) AS booking_count
-                        FROM
-                            client
-                        JOIN
-                            booking_ticket ON client.client_id = booking_ticket.client_id
-                        GROUP BY
-                            client.client_id, client.name, client.surname, client.email
-                        HAVING
-                            COUNT(booking_ticket.booking_id) > 3
-                        ORDER BY
-                            booking_count DESC;                                
+            c.execute("""SELECT * from (
+                        SELECT max(booking_count) as max from (
+                        SELECT 
+                            client.client_id, 
+                            client.name, 
+                            client.surname, 
+                            client.email, 
+                        COUNT(booking_ticket.booking_id) AS booking_count 
+                        FROM 
+                            client 
+                        JOIN 
+                            booking_ticket ON client.client_id = booking_ticket.client_id 
+                        GROUP BY 
+                            client.client_id, client.name, client.surname, client.email )t) t1
+                        
+                        inner join
+                            
+                        (SELECT 
+                            client.client_id, 
+                            client.name, 
+                            client.surname, 
+                            client.email, 
+                        COUNT(booking_ticket.booking_id) AS booking_count 
+                        FROM 
+                            client 
+                        JOIN 
+                            booking_ticket ON client.client_id = booking_ticket.client_id 
+                        GROUP BY 
+                            client.client_id, client.name, client.surname, client.email  ) t2
+                            
+                        ON t1.max = t2.booking_count
+                               
                         """)
 
             number_of_orders_data = c.fetchall()  # Get data from the query
