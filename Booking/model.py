@@ -88,14 +88,16 @@ class ModelBookingTicket:
         try:
             c.execute("""
             INSERT INTO booking_ticket (booking_id, client_id, room_number, booking_start_date, booking_end_date, price)
-                SELECT
+            select * from (
+            SELECT
                     nextval('booking_id_seq'),
                     floor(random() * (SELECT max(client_id) FROM client) + 1),
                     floor(random() * (SELECT max(room_number) FROM room) + 1),
-                    '2023-01-01'::date + floor(random() * (date '2023-11-05' - date '2023-01-01')) * interval '1 day',
-    		        '2023-11-05'::date + floor(random() * (date '2025-01-01' - date '2023-11-05')) * interval '1 day',
-    		        random() * 1000 
-		        FROM generate_series(1, %s)
+                    ('2023-01-01'::date + floor(random() * 3) * interval '1 day' + floor(random() * 12) * interval '1 month' + floor(random() * 31) * interval '1 day') as start1,
+                    ('2023-01-01'::date + floor(random() * 3) * interval '1 day' + floor(random() * 12) * interval '1 month' + floor(random() * 31) * interval '1 day') as finish1,
+                	random() * 1000 
+                FROM generate_series(1, %s)) as t
+            WHERE start1 < finish1
                   """, (number_of_operations,))
 
             self.conn.commit()
